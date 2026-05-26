@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bonne Fête Maman ! ❤️</title>
+    <!-- Chargement de la bibliothèque canvas-confetti depuis un CDN public stable -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            min-height: 100vh;
+            min-height: -webkit-fill-available; /* Fix pour la hauteur sur mobile iOS */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #2b2d42;
+        }
+
+        html {
+            height: -webkit-fill-available;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.98);
+            padding: 35px 25px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(251, 111, 146, 0.2);
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+            border: 3px solid #ffb3c6;
+            animation: appariement 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes appariement {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .heart-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: battement 1.2s infinite;
+            display: inline-block;
+        }
+
+        @keyframes battement {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            color: #fb6f92;
+            font-size: 2.1rem;
+            margin-bottom: 12px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            font-size: 1.05rem;
+            color: #5c677d;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        input[type="number"] {
+            width: 100px;
+            height: 80px;
+            padding: 10px;
+            font-size: 2.2rem;
+            text-align: center;
+            border: 3px solid #ffccd5;
+            border-radius: 20px;
+            outline: none;
+            color: #fb6f92;
+            font-weight: bold;
+            background-color: #fff0f3;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* Désactive les flèches par défaut sur mobile/navigateur */
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"]:focus {
+            border-color: #fb6f92;
+            background-color: #ffffff;
+            box-shadow: 0 0 15px rgba(251, 111, 146, 0.3);
+            transform: scale(1.05);
+        }
+
+        button {
+            background: linear-gradient(135deg, #ff8fab 0%, #fb6f92 100%);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(251, 111, 146, 0.4);
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        button:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 8px rgba(251, 111, 146, 0.4);
+        }
+
+        .result-box {
+            padding: 22px;
+            border-radius: 20px;
+            background-color: #fff0f3;
+            border: 2px dashed #ffb3c6;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4a5759;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .result-box.show {
+            opacity: 1;
+            transform: translateY(0);
+            background-color: #ffffff;
+            border-style: solid;
+            box-shadow: 0 8px 20px rgba(251, 111, 146, 0.1);
+        }
+
+        .gift-title {
+            color: #fb6f92;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .gift-text {
+            line-height: 1.4;
+        }
+
+        .error {
+            color: #e63946;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="heart-icon">💝</div>
+    <h1>Bonne Fête Maman !</h1>
+    <p class="subtitle">Indique le numéro de ta cocotte en papier ci-dessous pour découvrir ton cadeau :</p>
+    
+    <div class="input-wrapper">
+        <!-- inputmode="numeric" et pattern déclenchent le pavé numérique idéal sur iPhone/Android -->
+        <input type="number" id="cocotteNumber" min="1" max="8" inputmode="numeric" pattern="[1-8]*" placeholder="?">
+    </div>
+    
+    <button onclick="revelerSurprise()">Découvrir ma surprise ! ✨</button>
+    
+    <div id="result" class="result-box">
+        <span style="color: #a3b18a; font-weight: normal; font-size: 1.1rem;">Le cadeau apparaîtra ici...</span>
+    </div>
+</div>
+
+<script>
+    const cadeaux = {
+        1: "Petit dèj au lit ☕🥐",
+        2: "Un câlin tous les matins pendant 3 jours 🤗💖",
+        3: "Une journée sans dispute 😌🌸",
+        4: "Un massage relaxant 💆‍♀️✨",
+        5: "Le choix du film et du repas pendant une semaine 🎬🍝",
+        6: "Un bon pour un café ou thé servi avec amour ☕❤️",
+        7: "Une aide spéciale pour toutes les tâches de la journée 🧹🫶",
+        8: "Une journée spéciale rien que pour toi 👑💕"
+    };
+
+    function lancerConfettis() {
+        // Configuration de la pluie de confettis
+        var duree = 3 * 1000;
+        var fin = Date.now() + duree;
+
+        (function cadre() {
+            confetti({
+                particleCount: 3,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0, y: 0.8 },
+                colors: ['#fb6f92', '#ff8fab', '#ffc2d1', '#ffe5ec']
+            });
+            confetti({
+                particleCount: 3,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1, y: 0.8 },
+                colors: ['#fb6f92', '#ff8fab', '#ffc2d1', '#ffe5ec']
+            });
+
+            if (Date.now() < fin) {
+                requestAnimationFrame(cadre);
+            }
+        }());
+    }
+
+    function revelerSurprise() {
+        const input = document.getElementById('cocotteNumber');
+        const resultDiv = document.getElementById('result');
+        const numero = parseInt(input.value);
+
+        resultDiv.classList.remove('show');
+
+        // Léger délai pour fluidifier l'animation sur mobile
+        setTimeout(() => {
+            if (cadeaux[numero]) {
+                resultDiv.innerHTML = `<span class="gift-title">🎉 Gagné ! 🎉</span><span class="gift-text">${cadeaux[numero]}</span>`;
+                resultDiv.classList.add('show');
+                // Lancement de l'effet confettis magique
+                lancerConfettis();
+                
+                // Ferme le clavier du téléphone automatiquement après validation
+                input.blur();
+            } else {
+                resultDiv.innerHTML = "<span class='error'>Oups ! Choisis un numéro entre 1 et 8. 🤔</span>";
+                resultDiv.classList.add('show');
+            }
+        }, 150);
+    }
+
+    // Gestion de la touche "Entrée" sur les claviers mobiles
+    document.getElementById('cocotteNumber').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            revelerSurprise();
+        }
+    });
+</script>
+
+</body>
+</html>
