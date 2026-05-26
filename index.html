@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bonne Fête Maman ! ❤️</title>
+    
+    <!-- Intégration du logo dans l'onglet du navigateur (Favicon) -->
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/mdp2014/b/refs/heads/main/favicon.ico">
+    
     <!-- Chargement de la bibliothèque canvas-confetti depuis un CDN public stable -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -47,17 +51,27 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .heart-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            animation: battement 1.2s infinite;
-            display: inline-block;
+        /* Style spécial pour l'intégration de ton logo GitHub */
+        .logo-container {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        @keyframes battement {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
+        .logo-img {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            border-radius: 22px;
+            box-shadow: 0 5px 15px rgba(251, 111, 146, 0.15);
+            animation: flottement 3s ease-in-out infinite;
+        }
+
+        @keyframes flottement {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.03); }
+            100% { transform: translateY(0px) scale(1); }
         }
 
         h1 {
@@ -96,7 +110,6 @@
             font-weight: bold;
             background-color: #fff0f3;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            /* Désactive les flèches par défaut sur mobile/navigateur */
             -moz-appearance: textfield;
         }
 
@@ -181,12 +194,15 @@
 <body>
 
 <div class="container">
-    <div class="heart-icon">💝</div>
+    <!-- Remplacement de l'émoji par l'image de ton logo avec une jolie animation -->
+    <div class="logo-container">
+        <img class="logo-img" src="https://raw.githubusercontent.com/mdp2014/b/refs/heads/main/favicon.ico" alt="Logo Cocotte Maman">
+    </div>
+    
     <h1>Bonne Fête Maman !</h1>
     <p class="subtitle">Indique le numéro de ta cocotte en papier ci-dessous pour découvrir ton cadeau :</p>
     
     <div class="input-wrapper">
-        <!-- inputmode="numeric" et pattern déclenchent le pavé numérique idéal sur iPhone/Android -->
         <input type="number" id="cocotteNumber" min="1" max="8" inputmode="numeric" pattern="[1-8]*" placeholder="?">
     </div>
     
@@ -210,7 +226,6 @@
     };
 
     function lancerConfettis() {
-        // Configuration de la pluie de confettis
         var duree = 3 * 1000;
         var fin = Date.now() + duree;
 
@@ -243,15 +258,11 @@
 
         resultDiv.classList.remove('show');
 
-        // Léger délai pour fluidifier l'animation sur mobile
         setTimeout(() => {
             if (cadeaux[numero]) {
                 resultDiv.innerHTML = `<span class="gift-title">🎉 Gagné ! 🎉</span><span class="gift-text">${cadeaux[numero]}</span>`;
                 resultDiv.classList.add('show');
-                // Lancement de l'effet confettis magique
                 lancerConfettis();
-                
-                // Ferme le clavier du téléphone automatiquement après validation
                 input.blur();
             } else {
                 resultDiv.innerHTML = "<span class='error'>Oups ! Choisis un numéro entre 1 et 8. 🤔</span>";
@@ -260,7 +271,6 @@
         }, 150);
     }
 
-    // Gestion de la touche "Entrée" sur les claviers mobiles
     document.getElementById('cocotteNumber').addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
             revelerSurprise();
